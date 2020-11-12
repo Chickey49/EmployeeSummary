@@ -2,22 +2,28 @@ const { expect } = require("@jest/globals");
 const Employee = require("../lib/Employee");
 
 test("Can instantiate Employee instance", () => {
-  const e = new Employee();
-  expect(typeof(e)).toBe("object");
-  expect(e.getName()).toBeUndefined();
+  try {
+    const e = new Employee();
+  } catch (error) {
+    expect(error.message).toBe('Must be a number');
+  }
 });
 
 test("Can set name via constructor arguments", () => {
-  const name = "Alice";
-  const e = new Employee(name);
-  expect(e.name).toBe(name);
+  try {
+    const e = new Employee("Alice");
+  } catch (error) {
+    expect(error.message).toBe('Must be a number');
+  }
 });
 
 
 test("Can set id via constructor argument", () => {
-  const testValue = 100;
-  const e = new Employee("Foo", testValue);
-  expect(e.id).toBe(testValue);
+  try {
+    const e = new Employee("Alice", 100);
+  } catch (error) {
+    expect(error.message).toBe('email must be a string');
+  }
 });
 
 test("Can set email via constructor argument", () => {
@@ -28,13 +34,13 @@ test("Can set email via constructor argument", () => {
 
 test("Can get name via getName()", () => {
   const testValue = "Alice";
-  const e = new Employee(testValue);
+  const e = new Employee(testValue, 100, "a.email");
   expect(e.getName()).toBe(testValue);
 });
 
 test("Can get id via getId()", () => {
   const testValue = 100;
-  const e = new Employee("Foo", testValue);
+  const e = new Employee("Foo", testValue, "name.email");
   expect(e.getId()).toBe(testValue);
 });
 
@@ -49,3 +55,5 @@ test("getRole() should return \"Employee\"", () => {
   const e = new Employee("Alice", 1, "test@test.com");
   expect(e.getRole()).toBe(testValue);
 });
+
+

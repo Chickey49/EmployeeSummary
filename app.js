@@ -1,29 +1,29 @@
 const inquirer = require("inquirer");
-// inquirer.registerPrompt('list-input', require('./lib/Employee'));
-const Render = require("./lib/htmlRenderer");
-const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
+const {render, save} = require("./lib/htmlRenderer");
+const fs = require("fs");
+
 
 var employees = [];
 
 main();
 
 async function main() {
-    var newEmployees = [];
     console.log("Please build your team");
     var answers = await inquirer.prompt(Manager.getPrompts());
     let manager = new Manager(
         answers.managerName,
         answers.managerID,
         answers.managerEmail,
-        answers.officeNumber
+        answers.managerOffice
     );
     employees.push(manager);
-    // TODO: add manager to employees array
-   await getNextEmployee();
-   console.log("done");
+    await getNextEmployee();
+    var html = render(employees);
+    save(html);
+    console.log("done");
 }
 
 /**
@@ -41,7 +41,6 @@ async function getNextEmployee() {
 
     console.log("prompting for next.");
     var answers = await inquirer.prompt(nextEmployeePrompt);
-    // todo: test for DONE
     if (answers.addTeammate.toLowerCase() == "engineer") {
         let answers = await inquirer.prompt(Engineer.getPrompts());
         let e = new Engineer(
@@ -64,6 +63,6 @@ async function getNextEmployee() {
         employees.push(i);
         await getNextEmployee();
     }
-
 }
+render(employees)
 module.exports = employees;
